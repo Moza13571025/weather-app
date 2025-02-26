@@ -1,4 +1,4 @@
-// import './App.css';
+import './App.css';
 import { useEffect, useState } from "react";
 import { jsx } from "react/jsx-runtime";
 // import axios from "axios";
@@ -111,8 +111,8 @@ function App() {
   }, [selectedCounty, stations]);
 
   return (
-    <div>
-      <h1>紫外線指數查詢</h1>
+    <>
+      <h1>今日最大紫外線指數查詢</h1>
       <label>
         請選擇縣市
         <select
@@ -141,7 +141,15 @@ function App() {
           <p>日期：{date}</p>
         </div>
       )}
-    </div>
+      <small>
+        <p>
+          本網頁是我串接API的小作品。<br></br>主要功能是讓用戶可以根據縣市，查詢當天最大紫外線指數。<br></br>
+          過程中問到的困難是紫外線指數API的資料中，沒有『縣市名稱』。
+          <br></br>
+          解決方式，是找到第二支API--氣象站資料，先建立『氣象站站號』和『縣市』的對應關係，讓用戶可以選擇『縣市』，app再對應『站號』，回傳紫外線指數。
+        </p>
+      </small>
+    </>
   );
 }
 
