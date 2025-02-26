@@ -1,13 +1,13 @@
 // import './App.css';
 import { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 
 function App() {
   const [stations, setStations] = useState({}); // 存放縣市對應的 StationID
   const [counties, setCounties] = useState([]); // 存放所有縣市
   const [selectedCounty, setSelectedCounty] = useState(""); //存放使用者選取的縣市
-  const [location, setLocation] = useState("");
-  const [uvIndex, setUvIndex] = useState(null);
+  const [uvData, setUvData] = useState({}); // 存放 UVIndex
+  
 
   // const fetchUVIndex = async () => {
   //   const apiKey = "CWA-6D885349-B9CF-4B71-AAEA-5209ACCA0BEE"; // 你的 API Key
@@ -39,11 +39,12 @@ function App() {
   const apiKey = "CWA-6D885349-B9CF-4B71-AAEA-5209ACCA0BEE"; // 你的 API Key
   const url = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/C-B0074-001?Authorization=${apiKey}`;
   // 取得氣象站對應的縣市
+
   useEffect(() => {
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
-        console.log("API 回傳資料：", data); // 先確認 API 的資料格式
+        // console.log("API 回傳資料：", data); // 先確認 API 的資料格式
         if (
           !data.records ||
           !data.records.data ||
@@ -70,6 +71,28 @@ function App() {
       });
   }, []);
 
+  useEffect(() => {
+    if (selectedCounty && stations[selectedCounty]) {
+      fetch(
+        "https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0005-001?Authorization=CWA-6D885349-B9CF-4B71-AAEA-5209ACCA0BEE"
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          // console.log("紫外線API回傳資料", data);
+          if (!data) {
+            console.error("API格式錯誤");
+            return;
+          }
+          const uvMap = {};
+          data.records.weatherElement.location.forEach((item) => {
+            uvMap[item.StationID] = item.UVIndex;
+          });
+          console.log(uvMap);
+          setUvData(uvMap);
+        });
+    }
+  }, [selectedCounty, stations]);
+
   return (
     <div>
       <h1>紫外線指數查詢</h1>
@@ -90,6 +113,16 @@ function App() {
           }
         </select>
       </label>
+      {selectedCounty && stations[selectedCounty] && (
+        <div>
+          <h2>{selectedCounty}的紫外線指數為</h2>
+          <p>
+            {uvData[stations[selectedCounty]] !== undefined
+              ? `${uvData[stations[selectedCounty]]}`
+              : "資料載入中..."}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
