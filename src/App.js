@@ -1,5 +1,6 @@
 // import './App.css';
 import { useEffect, useState } from "react";
+import { jsx } from "react/jsx-runtime";
 // import axios from "axios";
 
 function App() {
@@ -7,7 +8,7 @@ function App() {
   const [counties, setCounties] = useState([]); // 存放所有縣市
   const [selectedCounty, setSelectedCounty] = useState(""); //存放使用者選取的縣市
   const [uvData, setUvData] = useState({}); // 存放 UVIndex
-  
+  const [date, setDate] = useState([]);
 
   // const fetchUVIndex = async () => {
   //   const apiKey = "CWA-6D885349-B9CF-4B71-AAEA-5209ACCA0BEE"; // 你的 API Key
@@ -56,7 +57,6 @@ function App() {
 
         const stationMap = {};
         const countyList = new Set();
-
         data.records.data.stationStatus.station.forEach((station) => {
           if (station.status === "現存測站") {
             stationMap[station.CountyName] = station.StationID;
@@ -87,8 +87,25 @@ function App() {
           data.records.weatherElement.location.forEach((item) => {
             uvMap[item.StationID] = item.UVIndex;
           });
-          console.log(uvMap);
+          // console.log(uvMap);
           setUvData(uvMap);
+        });
+    }
+  }, [selectedCounty, stations]);
+
+  useEffect(() => {
+    if (selectedCounty && stations[selectedCounty]) {
+      fetch(
+        "https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0005-001?Authorization=CWA-6D885349-B9CF-4B71-AAEA-5209ACCA0BEE"
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (!data) {
+            console.error("API格式錯誤");
+            return;
+          }
+          let date = data.records.weatherElement.Date;
+          setDate(date);
         });
     }
   }, [selectedCounty, stations]);
@@ -115,12 +132,13 @@ function App() {
       </label>
       {selectedCounty && stations[selectedCounty] && (
         <div>
-          <h2>{selectedCounty}的紫外線指數為</h2>
+          <h2>{selectedCounty}今日最大紫外線指數為</h2>
           <p>
             {uvData[stations[selectedCounty]] !== undefined
               ? `${uvData[stations[selectedCounty]]}`
               : "資料載入中..."}
           </p>
+          <p>日期：{date}</p>
         </div>
       )}
     </div>
