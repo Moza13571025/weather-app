@@ -106,7 +106,8 @@ function App() {
           <p>日期：{date}</p>
         </div>
       )}
-      <small>
+      <p className="note">說明：目前串接觀測站api，尚無新北市、苗栗縣、嘉義縣、雲林縣的資料，將於日後版本改善。</p>
+      <section>
         <ul>
           <li>本網頁是我串接API的小作品。</li>
           <li>
@@ -132,7 +133,7 @@ function App() {
             </ol>
           </li>
         </ul>
-      </small>
+      </section>
     </>
   );
 }

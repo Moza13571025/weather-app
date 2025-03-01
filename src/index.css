@@ -17,33 +17,38 @@ body {
   label {
     margin-inline: auto;
   }
-  div{
+  div {
     margin-inline: auto;
-    :nth-child(2){
+    :nth-child(2) {
       color: blueviolet;
       text-align: center;
       font-size: 40px;
     }
-    :nth-child(3){
-      font-size: 20px
+    :nth-child(3) {
+      font-size: 20px;
     }
+  }
+  .note {
+    color: brown;
+    text-align: center;
   }
 }
 
-small{
-  width: 80vmin;
-  margin-top: 5rem;
+section {
+  width: 90vmin;
+  margin-top: 1rem;
   margin-inline: auto;
+  font-size: 1rem;
+  color: darkblue;
+  li {
+    margin-top: 1rem;
+  }
+  ol li {
+    margin-left: 0;
+    margin-top: 1rem;
+  }
 }
 
-small ul li{
-  padding-top:0.5rem;
-}
-
-small ul li table{
-  margin-top: 0.5rem;
-  text-align: left;
-}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
