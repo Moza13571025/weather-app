@@ -1,4 +1,4 @@
-import './App.css';
+import "./App.css";
 import { useEffect, useState } from "react";
 import { jsx } from "react/jsx-runtime";
 // import axios from "axios";
@@ -10,39 +10,8 @@ function App() {
   const [uvData, setUvData] = useState({}); // 存放 UVIndex
   const [date, setDate] = useState([]);
 
-  // const fetchUVIndex = async () => {
-  //   const apiKey = "CWA-6D885349-B9CF-4B71-AAEA-5209ACCA0BEE"; // 你的 API Key
-  //   const url = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0005-001?Authorization=${apiKey}`;
-
-  //   try {
-  //     const response = await axios.get(url);
-  //     console.log("API 回應資料：", response.data);
-
-  //     // 解析 API 內的 location 陣列
-  //     const locations = response.data.records.weatherElement.location;
-  //     console.log("locations資料", locations);
-  //     const targetLocation = locations.find(
-  //       (item) => item.StationID === location
-  //     );
-  //     console.log("targetLocation資料", targetLocation);
-
-  //     if (targetLocation) {
-  //       setUvIndex(targetLocation.UVIndex); // 設定紫外線指數
-  //       console.log(targetLocation.UVIndex);
-  //     } else {
-  //       setUvIndex("查無此地區");
-  //     }
-  //   } catch (error) {
-  //     console.error("API 錯誤：", error);
-  //     setUvIndex("取得資料失敗");
-  //   }
-  // };
-  const apiKey = "CWA-6D885349-B9CF-4B71-AAEA-5209ACCA0BEE"; // 你的 API Key
-  const url = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/C-B0074-001?Authorization=${apiKey}`;
-  // 取得氣象站對應的縣市
-
   useEffect(() => {
-    fetch(url)
+    fetch("https://weather-api-proxy-snowy.vercel.app/api/weather")
       .then((res) => res.json())
       .then((data) => {
         // console.log("API 回傳資料：", data); // 先確認 API 的資料格式
@@ -73,9 +42,7 @@ function App() {
 
   useEffect(() => {
     if (selectedCounty && stations[selectedCounty]) {
-      fetch(
-        "https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0005-001?Authorization=CWA-6D885349-B9CF-4B71-AAEA-5209ACCA0BEE"
-      )
+      fetch("https://weather-api-proxy-snowy.vercel.app/api/uv")
         .then((res) => res.json())
         .then((data) => {
           // console.log("紫外線API回傳資料", data);
@@ -95,9 +62,7 @@ function App() {
 
   useEffect(() => {
     if (selectedCounty && stations[selectedCounty]) {
-      fetch(
-        "https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0005-001?Authorization=CWA-6D885349-B9CF-4B71-AAEA-5209ACCA0BEE"
-      )
+      fetch("https://weather-api-proxy-rose.vercel.app/api/uv")
         .then((res) => res.json())
         .then((data) => {
           if (!data) {
@@ -143,7 +108,8 @@ function App() {
       )}
       <small>
         <p>
-          本網頁是我串接API的小作品。<br></br>主要功能是讓用戶可以根據縣市，查詢當天最大紫外線指數。<br></br>
+          本網頁是我串接API的小作品。<br></br>
+          主要功能是讓用戶可以根據縣市，查詢當天最大紫外線指數。<br></br>
           過程中問到的困難是紫外線指數API的資料中，沒有『縣市名稱』。
           <br></br>
           解決方式，是找到第二支API--氣象站資料，先建立『氣象站站號』和『縣市』的對應關係，讓用戶可以選擇『縣市』，app再對應『站號』，回傳紫外線指數。
