@@ -24,7 +24,25 @@ body {
       text-align: center;
       font-size: 40px;
     }
+    :nth-child(3){
+      font-size: 20px
+    }
   }
+}
+
+small{
+  width: 80vmin;
+  margin-top: 5rem;
+  margin-inline: auto;
+}
+
+small ul li{
+  padding-top:0.5rem;
+}
+
+small ul li table{
+  margin-top: 0.5rem;
+  text-align: left;
 }
 
 code {

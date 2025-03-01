@@ -62,7 +62,7 @@ function App() {
 
   useEffect(() => {
     if (selectedCounty && stations[selectedCounty]) {
-      fetch("https://weather-api-proxy-rose.vercel.app/api/uv")
+      fetch("https://weather-api-proxy-snowy.vercel.app/api/uv")
         .then((res) => res.json())
         .then((data) => {
           if (!data) {
@@ -101,19 +101,37 @@ function App() {
           <p>
             {uvData[stations[selectedCounty]] !== undefined
               ? `${uvData[stations[selectedCounty]]}`
-              : "資料載入中..."}
+              : "觀測站無資料，請選擇其他縣市"}
           </p>
           <p>日期：{date}</p>
         </div>
       )}
       <small>
-        <p>
-          本網頁是我串接API的小作品。<br></br>
-          主要功能是讓用戶可以根據縣市，查詢當天最大紫外線指數。<br></br>
-          過程中問到的困難是紫外線指數API的資料中，沒有『縣市名稱』。
-          <br></br>
-          解決方式，是找到第二支API--氣象站資料，先建立『氣象站站號』和『縣市』的對應關係，讓用戶可以選擇『縣市』，app再對應『站號』，回傳紫外線指數。
-        </p>
+        <ul>
+          <li>本網頁是我串接API的小作品。</li>
+          <li>
+            主要功能是讓用戶可以根據『縣市名稱』，查詢今日『最大紫外線指數』。
+          </li>
+          <li>
+            開發過程
+            <ol>
+              <li>
+                <strong>遇到的困難：當1支API資料不足以取得所需變數</strong>
+                --紫外線指數API資料只有『氣象站ID』沒有『縣市名稱』
+                <br></br>
+                <strong>解決的方式：</strong>
+                找到另一支有『縣市名稱』的API--『有人氣象觀測站列表』，用來建立『氣象站ID』和『縣市名稱』的對應關係，再讓表單渲染出『縣市名稱』，讓使用者選擇。
+              </li>
+              <li>
+                <strong>遇到的困難：用React串接API如何隱藏金鑰？</strong>
+                --常見開源天氣API不需要金鑰，但中央氣象局API必須申請個人金鑰，寫入React元件恐暴露於外。
+                <br></br>
+                <strong>解決的方式：</strong>
+                另以Node.js撰寫後端程式向中央氣象局API取得資料，並設置好環境變數、將後端部署在代理伺服器，供本專案串接。
+              </li>
+            </ol>
+          </li>
+        </ul>
       </small>
     </>
   );
